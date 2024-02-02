@@ -3,6 +3,10 @@ Basic cartpole balancing agent training example with [Stable Baselines3](https:/
 
 Tested on Ubuntu 22.04 with _Python 3.12.1_.
 
+<p align="center">
+ <img src="./assets/cartpoles.gif" length="1." width="1.">
+</p>
+
 ## Installation
 
 Since the implementations are vectorised, a CUDA capable GPU is required. 
