@@ -4,7 +4,7 @@ Basic cartpole balancing agent training example with [Stable Baselines3](https:/
 Tested on Ubuntu 22.04 with _Python 3.12.1_.
 
 <p align="center">
- <img src="./assets/cartpoles.gif" length=".7" width=".7">
+ <img src="./assets/cartpoles.gif" length=".5" width=".5">
 </p>
 
 ## Installation
