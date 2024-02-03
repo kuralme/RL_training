@@ -12,7 +12,7 @@ Tested on Ubuntu 22.04 with _Python 3.12.1_.
 Since the implementations are vectorised, a CUDA capable GPU is required. 
 Clone the repository into your workspace. Then create dirs to save trained models and log files.
 ```
-cd RL_training
+cd RL_training_sb3
 mkdir -p Training/Saved_Models
 mkdir -p Training/Logs
 ```
