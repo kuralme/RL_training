@@ -1,10 +1,10 @@
 # Reinforcement Learning with Stable Baselines3
-Basic cartpole balancing agent training example with [Stable Baselines3](https://stable-baselines3.readthedocs.io/en/master/index.html) RL algorithm library with pytorch.
+Basic RL model training examples with [Stable Baselines3](https://stable-baselines3.readthedocs.io/en/master/index.html) RL algorithm library uses pytorch.
 
 Tested on Ubuntu 22.04 with _Python 3.12.1_.
 
 <p align="center">
- <img src="./assets/cartpoles.gif" length=".5" width=".5">
+ <img src="./assets/cartpole_perfect.gif" length=".5" width=".5">
 </p>
 
 ## Installation
@@ -28,7 +28,7 @@ conda activate your_env
 
 With the environment is set correctly you should be able to run the scripts.
 
-Train and test the cartpole agent:
+Train and test the cartpole model:
 ```
 python3 cartpole.py
 ```

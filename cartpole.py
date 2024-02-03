@@ -5,6 +5,7 @@
 import os
 import gymnasium
 import numpy as np
+import imageio
 from stable_baselines3 import PPO
 from stable_baselines3 import DQN
 from stable_baselines3.common.env_util import make_vec_env
@@ -95,19 +96,21 @@ env.close()
 # -------------- Define Vectorised Environment --------------------------
 vec_env = make_vec_env("CartPole-v1", n_envs=4)
 
-model_path = os.path.join('./', 'Training', 'Saved_Models')
-model_path_x = os.path.join('./', 'Training', 'Saved_Models', 'PPO_cartpole')
+models = os.path.join('./', 'Training', 'Saved_Models')
+model_path = os.path.join('./', 'Training', 'Saved_Models', 'PPO_cartpole')
 best_model_path = os.path.join('./', 'Training', 'Saved_Models', 'best_model')
 log_path = os.path.join('./', 'Training', 'Logs')
 
 # -------------- Training ------------------------------------------------
 print("Starting the training")
 model = PPO("MlpPolicy", vec_env, verbose=1, tensorboard_log=log_path)
-model.learn(total_timesteps=50000)
+model.learn(total_timesteps=1000000)
+model.save(model_path)
 del model
 
-# -------------- Evaluation -----------------------------------------------
-model = PPO.load(model_path_x, vec_env=vec_env)
+# -------------- Evaluation (single env) ----------------------------------
+vec_env = make_vec_env("CartPole-v1", n_envs=1)
+model = PPO.load(model_path, vec_env=vec_env)
 print(evaluate_policy(model, vec_env, n_eval_episodes=10, render=True))
 vec_env.close()
 
@@ -124,18 +127,29 @@ for episode in range(1, episodes+1):
     print('Episode:{} - Score:{}'.format(episode, score))
 vec_env.close()
 
+# # Make a gif
+# images = []
+# obs = vec_env.reset()
+# img = vec_env.render(mode="rgb_array")
+# for i in range(350):
+#     images.append(img)
+#     action, _ = model.predict(obs)
+#     obs, _, _ ,_ = vec_env.step(action)
+#     img = vec_env.render(mode="rgb_array")
+# imageio.mimsave("lander_a2c.gif", [np.array(img) for i, img in enumerate(images) if i%2 == 0], fps=29)
 
 # ------ Adding a callback to the training stage -------------------------
-
+vec_env = make_vec_env("CartPole-v1", n_envs=4)
 print("Starting the training with callbacks")
-stop_callback = StopTrainingOnRewardThreshold(reward_threshold=500, verbose=1)
+
+stop_callback = StopTrainingOnRewardThreshold(reward_threshold=490, verbose=1)
 eval_callback = EvalCallback(vec_env, 
                              callback_on_new_best=stop_callback, 
                              eval_freq=10000, 
-                             best_model_save_path=model_path, 
+                             best_model_save_path=models, 
                              verbose=1)
 model = PPO('MlpPolicy', vec_env, verbose = 1, tensorboard_log=log_path)
-model.learn(total_timesteps=100000, callback=eval_callback)
+model.learn(total_timesteps=1000000, callback=eval_callback)
 del model
 
 model = PPO.load(best_model_path, vec_env=vec_env)
